@@ -1,14 +1,29 @@
 import fetchUsers from "@/hooks/fetchUsers";
+import Link from "next/link";
 
-const UsersTable = async () => {
+interface UsersTableProps {
+  sortBy: string;
+}
+
+const UsersTable = async ({ sortBy }: UsersTableProps) => {
   const users = await fetchUsers();
+
+  users.sort(
+    sortBy === "email"
+      ? (a, b) => a.email.localeCompare(b.email)
+      : (a, b) => a.name.localeCompare(b.name)
+  );
 
   return (
     <table className="table">
       <thead>
         <tr>
-          <th>Name</th>
-          <th>Email</th>
+          <th>
+            <Link href="/users?sort=name">Name</Link>
+          </th>
+          <th>
+            <Link href="/users?sort=email">Email</Link>
+          </th>
         </tr>
       </thead>
       <tbody>

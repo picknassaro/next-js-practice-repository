@@ -1,11 +1,14 @@
 import UsersTable from "../../components/UsersTable/UsersTable";
 
-const UsersPage = () => {
+interface UsersPageProps {
+  searchParams: { sort: string };
+}
 
+const UsersPage = ({ searchParams: { sort } }: UsersPageProps) => {
   return (
     <>
       <h1>Users</h1>
-      <UsersTable />
+      <UsersTable sortBy={sort} />
     </>
   );
 };
