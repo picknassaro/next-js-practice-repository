@@ -1,8 +1,9 @@
 import AddToCartBtn from "../AddToCartBtn/AddToCartBtn";
+import styles from "./ProductCard.module.css";
 
 const ProductCard = () => {
   return (
-    <div>
+    <div className={styles.card}>
       <AddToCartBtn />
     </div>
   );
