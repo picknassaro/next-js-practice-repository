@@ -1,7 +1,13 @@
-const NewUser = () => {
-  return (
-    <div>NewUser</div>
-  )
-}
+"use client";
+import { useRouter } from "next/navigation";
 
-export default NewUser
+const NewUser = () => {
+  const router = useRouter();
+  return (
+    <button className="btn btn-primary" onClick={() => router.push("/users")}>
+      Create
+    </button>
+  );
+};
+
+export default NewUser;
