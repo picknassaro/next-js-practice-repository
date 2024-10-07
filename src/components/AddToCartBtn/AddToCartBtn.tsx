@@ -1,8 +1,14 @@
-'use client';
+"use client";
+import { AddToCartButtonStyles } from "./AddToCart.tailwindClasses";
 
 const AddToCartBtn = () => {
   return (
-    <button onClick={() => console.log("Added to cart!")}>Add to cart</button>
+    <button
+      className={AddToCartButtonStyles}
+      onClick={() => console.log("Added to cart!")}
+    >
+      Add to cart
+    </button>
   );
 };
 
