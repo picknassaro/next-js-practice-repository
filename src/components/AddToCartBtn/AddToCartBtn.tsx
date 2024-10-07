@@ -4,7 +4,7 @@ import { AddToCartButtonStyles } from "./AddToCart.tailwindClasses";
 const AddToCartBtn = () => {
   return (
     <button
-      className={AddToCartButtonStyles}
+      className={["btn btn-primary", AddToCartButtonStyles].join(" ")}
       onClick={() => console.log("Added to cart!")}
     >
       Add to cart
