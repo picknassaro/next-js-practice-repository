@@ -11,7 +11,7 @@ const UsersTable = async ({ sortBy }: UsersTableProps) => {
   users.sort(
     sortBy === "email"
       ? (a, b) => a.email.localeCompare(b.email)
-      : (a, b) => a.name.localeCompare(b.name)
+      : sortBy === "name" ? (a, b) => a.name.localeCompare(b.name) : undefined
   );
 
   return (
