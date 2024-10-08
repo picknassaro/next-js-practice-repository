@@ -7,7 +7,9 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   // params.id has to be passed as a string to prisma and then parseInt turns it back into a number. I assume all things that get passed to prisma have to be strings, but we'll find out.
-  const user = await prisma.user.findUnique({ where: { id: parseInt(params.id) } });
+  const user = await prisma.user.findUnique({
+    where: { id: parseInt(params.id) },
+  });
 
   if (!user) return NextResponse.json({ error: "Not found" }, { status: 404 });
   return NextResponse.json(user);
@@ -15,7 +17,7 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: number } }
+  { params }: { params: { id: string } }
 ) {
   const body = await request.json();
   const validation = schema.safeParse(body);
@@ -23,10 +25,19 @@ export async function PUT(
   if (!validation.success)
     return NextResponse.json(validation.error.errors, { status: 400 });
 
-  if (params.id > 10)
-    return NextResponse.json({ error: "User not found" }, { status: 404 });
+  const user = await prisma.user.findUnique({
+    where: { id: parseInt(params.id) },
+  });
 
-  return NextResponse.json({ id: params.id, name: body.name });
+  if (!user) {
+    return NextResponse.json({ error: "User not found" }, { status: 404 });
+  }
+  const updatedUser = await prisma.user.update({
+    where: { id: user.id },
+    data: { name: body.name, email: body.email },
+  });
+
+  return NextResponse.json(updatedUser);
 }
 
 export function DELETE(
