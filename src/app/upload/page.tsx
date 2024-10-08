@@ -17,6 +17,11 @@ const UploadPage = () => {
         />
       )}
       <CldUploadWidget
+        options={{
+          sources: ["local"],
+          maxFiles: 1,
+          multiple: false,
+        }}
         uploadPreset="gzdxupkh"
         onSuccess={(response: { info?: { public_id: string } | string }) => {
           if (typeof response.info === "object" && response.info?.public_id) {
