@@ -1,13 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 import schema from "../schema";
+import prisma from "../../../../../prisma/client";
 
-export function GET(
+export async function GET(
   request: NextRequest,
-  { params }: { params: { id: number } }
+  { params }: { params: { id: string } }
 ) {
-  if (params.id > 10)
-    return NextResponse.json({ error: "Not found" }, { status: 404 });
-  return NextResponse.json({ id: params.id, name: "User " + params.id });
+  // params.id has to be passed as a string to prisma and then parseInt turns it back into a number. I assume all things that get passed to prisma have to be strings, but we'll find out.
+  const user = await prisma.user.findUnique({ where: { id: parseInt(params.id) } });
+
+  if (!user) return NextResponse.json({ error: "Not found" }, { status: 404 });
+  return NextResponse.json(user);
 }
 
 export async function PUT(
