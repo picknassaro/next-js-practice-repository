@@ -20,14 +20,10 @@ export async function GET(request: NextRequest) {
     );
   }
   if (price) {
-    products = products.filter(
-      (item) => item.price === parseFloat(price)
-    );
+    products = products.filter((item) => item.price === parseInt(price));
   }
   if (stock) {
-    products = products.filter(
-      (item) => item.stock === parseInt(stock)
-    );
+    products = products.filter((item) => item.stock === parseInt(stock));
   }
 
   if (products.length === 0) {
@@ -61,4 +57,61 @@ export async function POST(request: NextRequest) {
     },
   });
   return NextResponse.json(newProduct, { status: 201 });
+}
+
+export async function PUT(request: NextRequest) {
+  const body = await request.json();
+  const validation = schema.safeParse(body);
+
+  if (!validation.success)
+    return NextResponse.json(validation.error.errors, { status: 400 });
+
+  const { searchParams } = new URL(request.url);
+  const productId = searchParams.get("id");
+
+  if (!productId)
+    return NextResponse.json(
+      { error: "No product ID provided" },
+      { status: 404 }
+    );
+
+  const product = await prisma.product.findUnique({
+    where: { id: parseInt(productId) },
+  });
+
+  if (!product)
+    return NextResponse.json({ error: "Product not found" }, { status: 404 });
+
+  const updatedProduct = await prisma.product.update({
+    where: { id: parseInt(productId) },
+    data: {
+      name: body.name,
+      price: parseInt(body.price),
+      stock: parseInt(body.stock),
+    },
+  });
+  return NextResponse.json(updatedProduct);
+}
+
+export async function DELETE(request: NextRequest) {
+  const { searchParams } = new URL(request.url);
+  const productId = searchParams.get("id");
+
+  if (!productId)
+    return NextResponse.json(
+      { error: "No product ID provided" },
+      { status: 404 }
+    );
+
+  const product = await prisma.product.findUnique({
+    where: { id: parseInt(productId) },
+  });
+
+  if (!product)
+    return NextResponse.json({ error: "Product not found" }, { status: 404 });
+
+  const deletedProduct = await prisma.product.delete({
+    where: { id: parseInt(productId) },
+  });
+  return NextResponse.json(deletedProduct);
 }
