@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import schema from "../schema";
 
 export function GET(
   request: NextRequest,
@@ -14,9 +15,10 @@ export async function PUT(
   { params }: { params: { id: number } }
 ) {
   const body = await request.json();
+  const validation = schema.safeParse(body);
 
-  if (!body.name)
-    return NextResponse.json({ error: "Name is required" }, { status: 400 });
+  if (!validation.success)
+    return NextResponse.json(validation.error.errors, { status: 400 });
 
   if (params.id > 10)
     return NextResponse.json({ error: "User not found" }, { status: 404 });
@@ -31,5 +33,8 @@ export function DELETE(
   if (params.id > 10)
     return NextResponse.json({ error: "User not found" }, { status: 404 });
 
-  return NextResponse.json({ message: "User deleted successfully" }, { status: 200 });
+  return NextResponse.json(
+    { message: "User deleted successfully" },
+    { status: 200 }
+  );
 }
