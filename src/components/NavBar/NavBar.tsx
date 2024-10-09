@@ -28,7 +28,7 @@ const NavBar = () => {
           <div className="mr-5">
             {session?.user?.name || session?.user?.email || "Unidentified User"}
           </div>
-          <div className="mr-5">Sign out</div>
+          <Link href="/api/auth/signout" className="mr-5">Sign out</Link>
         </>
       )}
     </nav>
