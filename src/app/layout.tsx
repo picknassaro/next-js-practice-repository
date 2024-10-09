@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import NavBar from "@/components/NavBar/NavBar";
+import AuthProvider from "./auth/Provider";
 
 export const metadata: Metadata = {
   title: "Mastering Next.js",
@@ -14,10 +15,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" data-theme="winter">
-      <body className="antialiased">
-        <NavBar />
-        <main className="p-5">{children}</main>
-      </body>
+      <AuthProvider>
+        <body className="antialiased">
+          <NavBar />
+          <main className="p-5">{children}</main>
+        </body>
+      </AuthProvider>
     </html>
   );
 }
